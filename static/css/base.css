@@ -1,0 +1,26 @@
+.main {
+	text-align: center;
+	margin: auto;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	padding: 50px;
+}
+
+.login-btn {
+	background-color: #1db954;
+	border-color: #1db954;
+	font-weight: 600;
+}
+
+.login-btn:hover {
+	background-color: #1ed760;
+	border-color: #1ed760;}
+
+#login {
+	margin: auto;
+	width: 750px;
+	height: 750px;
+}
