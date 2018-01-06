@@ -8,11 +8,18 @@
     <script type="text/javascript" src="{% static 'js/base.js' %}"></script>
   </head>
   <body>
+    {% if messages %}
+    <ul class='messages'>
+      {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %} 
     <div class="container main">
       <div id="login">
         <h1>Welcome to Moodify!</h1>
         <p>Discover new ways to amplify your mood through songs and playlists that are carefully selected to fit your taste and you current mood. Built using Google's Machine Learning API and Spotify's Web Player API. </p>
-        <a href="" class="btn btn-primary login-btn" onclick="">Log in with Spotify</a>
+        <a href="{% url 'login' %}" class="btn btn-primary login-btn" onclick="">Log in with Spotify</a>
       </div>
     </div>
   </body>

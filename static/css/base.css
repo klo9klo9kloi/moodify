@@ -24,3 +24,23 @@
 	width: 750px;
 	height: 750px;
 }
+
+h4 {
+	width: 50px;
+	margin: auto;
+}
+
+dd {
+	text-align: left;
+}
+
+ul{
+	text-align: left;
+	width: fit-content;
+	margin: auto;
+}
+
+.messages 
+{
+	list-style: none;
+}
