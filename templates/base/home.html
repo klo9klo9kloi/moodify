@@ -33,7 +33,7 @@
           <dt>Access token</dt><dd class="text-overflow">{{access_token}}</dd>
           <dt>Refresh token</dt><dd class="text-overflow">{{refresh_token}}></dd>
         </dl>
-        <a class="btn btn-primary" href="{% url 'refresh_token' refresh_token %}">Get New Access Token</a>
+        <a class="btn btn-primary" href="{% url 'refresh_token' %}">Get New Access Token</a>
       </div>
       <div id="top-tracks">
         <h2>Top Tracks</h2>
@@ -43,6 +43,13 @@
           {% endfor %}
         </ul>
       </div>
+      <div id="matchmaker">
+        <form action="{% url 'matches' %}" method="get">
+          {% csrf_token %}
+          {{ form }}
+          <input type="submit" value="Submit"/>
+        </form>
       </div>
+    </div>
   </body>
 </html>

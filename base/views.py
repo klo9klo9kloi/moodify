@@ -3,11 +3,12 @@ from django.contrib import messages
 
 # Create your views here.
 from django.http import HttpResponse
+from .forms import MatchForm
 
 import base64, requests, math, random
 
-client_id = 'cd960552ab404a439a6b8f100caed209'
-client_secret = 'b7dac5ea25cb4fe798887ea15a9b57ce'
+client_id = 'YOUR ID HERE'
+client_secret = 'YOUR SECRET HERE'
 scope = 'user-read-private user-read-email user-top-read'
 login_redirect = 'http://127.0.0.1:8000/callback/'
 state_key = 'spotify_auth_state'
@@ -57,20 +58,24 @@ def callback(request):
 
 		if r.status_code == requests.codes.ok:
 			response = r.json()
-			return redirect('/home/?access_token=' + response['access_token'] + '&refresh_token=' + response['refresh_token'])
+			request.session['access_token'] = response['access_token']
+			request.session['refresh_token'] = response['refresh_token']
+			return redirect('home')
 		else:
 			messages.error(request, 'Error: '+ str(r.status_code))
 			return redirect('index')
 
 def home(request):
-	access_token = request.GET.get('access_token', None)
-	refresh_token = request.GET.get('refresh_token', None)
+	access_token = request.session['access_token']
+	refresh_token = request.session['refresh_token']
 	if not access_token:
 		messages.error(request, 'Access token does not exist.')
 		return redirect('index')
 	else:
 		user_info = requests.get(SPOTIFY_APIENDPOINT + ME_ENDPOINT, headers={'Authorization': 'Bearer ' + access_token}).json()
 		top_tracks = requests.get(SPOTIFY_APIENDPOINT + ME_ENDPOINT + '/top/tracks', headers={'Authorization': 'Bearer ' + access_token}).json()
+		form = MatchForm()
+
 
 		context = {
 			'access_token': access_token,
@@ -82,11 +87,13 @@ def home(request):
 			'external_urls': user_info['external_urls'],
 			'href': user_info['href'],
 			'images': user_info['images'],
-			'top_tracks': top_tracks
+			'top_tracks': top_tracks,
+			'form': form
 		}
 		return render(request, 'base/home.html', context)
 
-def refresh_token(request, rt):
+def refresh_token(request):
+	rt = request.session['refresh_token']
 	if not rt:
 		messages.error(request, 'Refresh token does not exist.')
 		return redirect('index')
@@ -95,10 +102,47 @@ def refresh_token(request, rt):
 
 	if r.status_code == requests.codes.ok:
 		response = r.json()
-		return redirect('/home/?access_token=' + response['access_token'] + '&refresh_token=' + rt)
+		request.session['access_token'] = response['access_token']
+		return redirect('home')
 	else:
 		messages.error(request, 'Error: ' + str(r.status_code))
 		return redirect('index')
+
+def matches(request):
+	if request.method == 'GET':
+		form = MatchForm(request.GET)
+		if form.is_valid():
+
+			valence = float(form.cleaned_data['user_input'])
+
+			access_token = request.session['access_token']
+			refresh_token = request.session['refresh_token']
+
+			top_tracks = requests.get(SPOTIFY_APIENDPOINT + ME_ENDPOINT + '/top/tracks/?limit=50', headers={'Authorization': 'Bearer ' + access_token}).json()
+
+			ids = ''
+			for track in top_tracks['items']:
+				ids = ids + track['id'] + ','
+
+			ids = ids[:-1]
+			audio_features = requests.get(SPOTIFY_APIENDPOINT + '/v1/audio-features/?ids=' + ids, headers={'Authorization': 'Bearer ' + access_token}).json()
+
+			matches = {}
+			for track in audio_features['audio_features']:
+				print(track['valence'])
+				if (valence-0.05) < track['valence'] < (valence+0.05):
+					matches[track['id']] = 1
+
+			tracks = []
+			for track in top_tracks['items']:
+				if track['id'] in matches:
+					tracks.append(track)
+
+			context = {'tracks': tracks}	
+			return render(request, 'base/matches.html', context)
+	messages.error(request, 'Bad form submission')
+	return redirect('home')
+
 
 # def home(request):
 # 	code = request.GET.get('code', None)
