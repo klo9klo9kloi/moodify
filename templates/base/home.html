@@ -1,18 +1,20 @@
-{% load staticfiles %}
-<html>
-  <head>
-    <title>Moodify - Home</title>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    <script type="text/javascript" src="{% static 'js/base.js' %}"></script>
-  </head>
-  <body>
-    <div class="container main">
-      <div id="user-info">
-        <h1>Logged in as {{display_name}}</h1>
+{% extends "generic.html" %}
+
+{% block title %} - Home{% endblock %}
+
+{% block navright %}
+  <li class="nav-icon">
+    <a href="{{external_urls.spotify}}"><img class="profile-pic" src="{{images.0.url}}" /></a>
+  </li>
+{% endblock %}
+
+{% block content %}
+<div class="container main">
+    <h2>User Info</h2>
+    <div id="user-info" class="section">
         <div class="media">
           <div class="pull-left">
-            <img class="media-object" width="150" src="{{images.0.url}}" />
+              <img class="media-object" width="150" src="{{images.0.url}}" />
           </div>
           <div class="media-body">
             <dl class="dl-horizontal">
@@ -24,32 +26,43 @@
               <dt>Profile Image</dt><dd class="clearfix"><a href="{{images.0.url}}">{{images.0.url}}</a></dd>
               <dt>Country</dt><dd>{{country}}</dd>
             </dl>
-          </div>
         </div>
       </div>
-      <div id='tokens'>
-        <h2>oAuth info</h2>
-        <dl class="dl-horizontal">
-          <dt>Access token</dt><dd class="text-overflow">{{access_token}}</dd>
-          <dt>Refresh token</dt><dd class="text-overflow">{{refresh_token}}></dd>
-        </dl>
-        <a class="btn btn-primary" href="{% url 'refresh_token' %}">Get New Access Token</a>
-      </div>
-      <div id="top-tracks">
-        <h2>Top Tracks</h2>
-        <ul>
-          {% for track in top_tracks.items %}
-            <li><a href="{{track.external_urls.spotify}}">{{ track.name }}</a></li>
-          {% endfor %}
-        </ul>
-      </div>
-      <div id="matchmaker">
-        <form action="{% url 'matches' %}" method="get">
-          {% csrf_token %}
-          {{ form }}
-          <input type="submit" value="Submit"/>
-        </form>
-      </div>
     </div>
-  </body>
-</html>
+    <h2>oAuth Info</h2>
+    <div id='tokens' class="section">
+      <dl class="dl-horizontal">
+        <dt>Access token</dt><dd class="text-overflow">{{access_token}}</dd>
+        <dt>Refresh token</dt><dd class="text-overflow">{{refresh_token}}></dd>
+      </dl>
+      <a class="btn btn-primary" href="{% url 'refresh_token' %}">Get New Access Token</a>
+    </div>
+    <h2>Top Tracks</h2>
+    <div id="top-tracks" class="section">
+      <ul>
+        {% for track in top_tracks.items %}
+          <li><a href="{{track.external_urls.spotify}}">{{ track.name }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <h2>Moodifier</h2>
+    <div id="matchmaker" class="section">
+      <form action="{% url 'matches' %}" method="get">
+        {% csrf_token %}
+        <div class="form-group">
+           {{ form }}
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </div>
+
+
+
+<!-- bootstrap stuff -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
+
+{% endblock %}

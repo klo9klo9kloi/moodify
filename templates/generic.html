@@ -1,0 +1,44 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <script type="text/javascript" src="{% static 'js/base.js' %}"></script>
+    <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans|Open+Sans" rel="stylesheet">
+    <title>Moodify{% block title %}{% endblock %}</title>
+</head>
+
+<body>
+    {% block navbar %}
+    <nav class='navbar navbar-expand navbar-dark bg-dark'>
+        <a class="navbar-brand pull-left" href="/">Moodify</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disabled" href="#">History</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disabled" href="#">Trending</a>
+              </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              {% block navright %}
+              {% endblock %}
+            </ul>
+          </div>
+    </nav>
+    {% endblock %}
+
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

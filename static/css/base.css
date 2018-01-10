@@ -1,9 +1,3 @@
-.main {
-	text-align: center;
-	margin: auto;
-	padding: 30px;
-}
-
 .login-btn {
 	background-color: #1db954;
 	border-color: #1db954;
@@ -14,27 +8,6 @@
 	background-color: #1ed760;
 	border-color: #1ed760;}
 
-#login {
-	margin: auto;
-	width: 750px;
-	height: 750px;
-}
-
-h4 {
-	width: 50px;
-	margin: auto;
-}
-
-dd {
-	text-align: left;
-}
-
-ul{
-	text-align: left;
-	width: fit-content;
-	margin: auto;
-}
-
 div {
 	margin: 20px;
 }
@@ -42,4 +15,29 @@ div {
 .messages 
 {
 	list-style: none;
+}
+
+.nav-icon > a {
+	padding-top: 14px;
+	padding-bottom: 14px;
+	font-size: 38px;
+}
+
+.profile-pic {
+	position: relative;
+    float: right;
+    width: 50px;
+}
+
+ul, .section {
+	font-family: 'Open Sans', sans-serif;
+}
+
+
+/*dd, dt {
+	text-align: center;
+}
+*/
+h1, h2, h3, h4, .navbar-brand {
+	font-family: 'Merriweather Sans', sans-serif;
 }
