@@ -2,29 +2,23 @@
 
 {% block title %} - Home{% endblock %}
 
-{% block navright %}
-  <li class="nav-icon">
-    <a href="{{external_urls.spotify}}"><img class="profile-pic" src="{{images.0.url}}" /></a>
-  </li>
-{% endblock %}
-
 {% block content %}
 <div class="container main">
   <h2>User Info</h2>
   <div id="user-info" class="section">
       <div class="media">
         <div class="pull-left">
-            <img class="media-object" width="150" src="{{images.0.url}}" />
+            <img class="media-object" width="150" src="{{images}}" />
         </div>
         <div class="media-body">
           <dl class="dl-horizontal">
             <dt>Display name</dt><dd class="clearfix">{{display_name}}</dd>
-            <dt>Id</dt><dd>{{id}}</dd>
+            <dt>Id</dt><dd>{{spotify_id}}</dd>
             <dt>Email</dt><dd>{{email}}</dd>
-            <dt>Spotify URI</dt><dd><a href="{{external_urls.spotify}}">{{external_urls.spotify}}</a></dd>
-            <dt>Link</dt><dd><a href="{{href}}">{{href}}</a></dd>
-            <dt>Profile Image</dt><dd class="clearfix"><a href="{{images.0.url}}">{{images.0.url}}</a></dd>
-            <dt>Country</dt><dd>{{country}}</dd>
+            <dt>Spotify URI</dt><dd><a href="{{profile}}">{{profile}}</a></dd>
+<!--             <dt>Link</dt><dd><a href="{{href}}">{{href}}</a></dd> -->
+            <dt>Profile Image</dt><dd class="clearfix"><a href="{{images.0.url}}">{{images}}</a></dd>
+<!--             <dt>Country</dt><dd>{{country}}</dd> -->
           </dl>
       </div>
     </div>
@@ -35,7 +29,7 @@
       <dt>Access token</dt><dd class="text-overflow">{{access_token}}</dd>
       <dt>Refresh token</dt><dd class="text-overflow">{{refresh_token}}></dd>
     </dl>
-    <a class="btn btn-primary" href="{% url 'refresh_token' %}">Get New Access Token</a>
+    <a class="btn btn-primary" href="{% url 'refresh_token' id %}">Get New Access Token</a>
   </div>
   <h2>Top Tracks</h2>
   <div id="top-tracks" class="section">
@@ -48,7 +42,7 @@
 
   <h2>Moodifier</h2>
   <div id="matchmaker" class="section">
-    <form action="{% url 'matches' %}" method="get">
+    <form action="{% url 'matches' id %}" method="get">
       {% csrf_token %}
       <div class="form-group">
          {{ form }}

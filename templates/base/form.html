@@ -1,0 +1,25 @@
+{% extends 'generic.html' %}
+{% block title %} - {{ type }}{% endblock %}
+{% block navbar %}
+{% endblock %}
+{% block content %}
+
+<!-- put a header here? like 'moodify' across top -->
+<div class='container main'>
+	<div class='row'>
+		<div class='col'>
+		</div>
+		<div class='col-md-6'>
+			<form action="{{ action }}" method="post">
+				{% csrf_token %}
+				<div class="form-group">
+					{{ form }}
+				</div>
+				<button type="submit" class="btn btn-primary">{{ type }}</button>
+				</form>
+		</div>
+		<div class='col'></div>
+	</div>
+	
+</div>
+{% endblock %}
