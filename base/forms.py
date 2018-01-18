@@ -1,8 +1,15 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from .models import Document
 
 class MatchForm(forms.Form):
 	user_input = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), label="How are you feeling today? (input float between 0.0 and 1.0)", max_length=50)
+
+# chris's sad attempt at image upload
+# class MatchForm(forms.Form):
+# 	class Meta:
+# 		model = Document
+# 		fields = ('description', 'document',)
 
 class LoginForm(AuthenticationForm):
 	username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), label="Username", max_length=20)

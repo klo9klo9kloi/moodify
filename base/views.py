@@ -1,3 +1,11 @@
+# === Google Cloud Imports === #
+import io
+import os
+
+from google.cloud import vision
+from google.cloud.vision import types
+# ============================ #
+
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
@@ -126,6 +134,15 @@ def home(request, user_id):
 		top_tracks = requests.get(SPOTIFY_APIENDPOINT + ME_ENDPOINT + '/top/tracks', headers={'Authorization': 'Bearer ' + access_token}).json()
 		form = MatchForm()
 
+		# chris's sad attempt at image upload
+		# if request.method == 'POST':
+		# 	form = DocumentForm(request.POST, request.FILES)
+		# 	if form.is_valid():
+		# 		form.save()
+		# 		return redirect('home')
+		# else:
+		# 	form = DocumentForm()
+
 
 		context = {
 			'id': user_id,
@@ -166,6 +183,15 @@ def matches(request, user_id):
 
 			valence = float(form.cleaned_data['user_input'])
 
+			# chris's sad attempt at using google vision
+			# client = vision.ImageAnnotatorClient()
+			# file_name = '### FIND FILE NAME ###'
+			# with io.open(file_name, 'rb') as image_file:
+			# 	content = image_file.read()
+			# image = types.Image(content=content)
+			# response = client.face_detection(image=image)
+			# valence = response.face_annotations[0].joy_likelihood ### MAKE NUMBER BETWEEN 0 AND 1 ###
+
 			access_token = moodify_user.access_token
 
 			top_tracks = requests.get(SPOTIFY_APIENDPOINT + ME_ENDPOINT + '/top/tracks/?limit=50', headers={'Authorization': 'Bearer ' + access_token}).json()
@@ -192,6 +218,3 @@ def matches(request, user_id):
 			return render(request, 'base/matches.html', context)
 	messages.error(request, 'Bad form submission')
 	return redirect('home')
-
-
-	

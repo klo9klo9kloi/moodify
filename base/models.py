@@ -11,3 +11,8 @@ class MoodifyUser(models.Model):
 	spotify_profile_url = models.URLField()
 	spotify_image = models.URLField()
 
+# chris's sad attempt at image upload
+# class Document(models.Model):
+# 	description = models.CharField(max_length=255, blank=True)
+# 	document = models.FileField(upload_to='uploads/')
+# 	uploaded_at = models.DateTimeField(auto_now_add=True)
