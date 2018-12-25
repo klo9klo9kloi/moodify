@@ -40,6 +40,12 @@
     </nav>
     {% endblock %}
 
+    <ul>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+
     <div id="content">
         {% block content %}{% endblock %}
     </div>

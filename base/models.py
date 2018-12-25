@@ -10,4 +10,3 @@ class MoodifyUser(models.Model):
 	refresh_token = models.CharField(max_length=200, unique=True)
 	spotify_profile_url = models.URLField()
 	spotify_image = models.URLField()
-

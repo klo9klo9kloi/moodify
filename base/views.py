@@ -11,8 +11,8 @@ from .models import MoodifyUser
 
 import base64, requests, math, random
 
-client_id = 'YOUR ID HERE'
-client_secret = 'YOUR SECRET HERE'
+client_id = 'cd960552ab404a439a6b8f100caed209'
+client_secret = '371e9a11868642f095646f001ca55ee3'
 scope = 'user-read-private user-read-email user-top-read'
 login_redirect = 'http://127.0.0.1:8000/callback/'
 state_key = 'spotify_auth_state'
@@ -42,7 +42,7 @@ def login(request):
 			user = User.objects.get(username=login_form.cleaned_data['username'])
 			if not hasattr(user, 'moodify'):
 				return redirect('authorize')
-			return redirect('home', user)
+			return redirect('home', user.moodify.id)
 		else:
 			messages.error(request, 'Username or Password Incorrect')
 
@@ -104,19 +104,22 @@ def callback(request):
 
 			user=User.objects.get(email=user_info['email'])
 			print(user)
-			moodify_user = MoodifyUser(user=user, display_name=user_info['display_name'], spotify_id=user_info['id'], access_token=response['access_token'], 
-				refresh_token=response['refresh_token'], spotify_profile_url=user_info['external_urls']['spotify'], spotify_image=user_info['images'][0]['url'])
-			moodify_user.save()
+			try:
+				moodify_user = user.moodify
+				print('here')
+			except:
+				moodify_user = MoodifyUser(user=user, display_name=user_info['display_name'], spotify_id=user_info['id'], access_token=response['access_token'], 
+					refresh_token=response['refresh_token'], spotify_profile_url=user_info['external_urls']['spotify'], spotify_image=user_info['images'][0]['url'])
+				moodify_user.save()
+				user.moodify = moodify_user
 			print(moodify_user)
-			user.moodify = moodify_user
-
 			return redirect('home', moodify_user.id)
 		else:
 			messages.error(request, 'Error: '+ str(r.status_code))
 			return redirect('index')
 
-def home(request, user_id):
-	moodify_user = get_object_or_404(MoodifyUser, id=user_id)
+def home(request, m_user_id):
+	moodify_user = get_object_or_404(MoodifyUser, id=m_user_id)
 	access_token = moodify_user.access_token
 	refresh_token = moodify_user.refresh_token
 	if not access_token:
