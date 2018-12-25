@@ -19,8 +19,8 @@ from .models import MoodifyUser
 
 import base64, requests, math, random
 
-client_id = 'cd960552ab404a439a6b8f100caed209'
-client_secret = '371e9a11868642f095646f001ca55ee3'
+client_id = 'YOUR ID HERE'
+client_secret = 'YOUR SECRET HERE'
 scope = 'user-read-private user-read-email user-top-read'
 login_redirect = 'http://127.0.0.1:8000/callback/'
 state_key = 'spotify_auth_state'
